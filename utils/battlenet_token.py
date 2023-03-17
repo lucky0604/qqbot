@@ -1,9 +1,11 @@
 import httpx
 from utils.redis_util import get_redis
-from utils.consts import APP_ID, APP_SECRET, BATTLENET_TOKEN_URL
+from utils.consts import BATTLENET_TOKEN_URL
+from core.config import get_config_consts
 
 
 def get_battlenet_token():
+    args = get_config_consts()
     redis_client = get_redis()
     token = redis_client.get("battlenet_token")
     if token is None:
@@ -11,7 +13,8 @@ def get_battlenet_token():
         with httpx.Client() as client:
             result = client.post(BATTLENET_TOKEN_URL,
                                  params=params,
-                                 auth=(APP_ID, APP_SECRET))
+                                 auth=(args["battlenet"]["appid"],
+                                       args["battlenet"]["appsecret"]))
             if result.json() is not None:
                 redis_client.set("battlenet_token",
                                  result.json()["access_token"],

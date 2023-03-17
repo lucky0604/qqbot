@@ -10,6 +10,12 @@ from core.exceptions import CustomException
 from core.fastapi.middlewares import SQLAlchemyMiddleware
 from core.helpers.cache import Cache, RedisBackend, CustomKeyMaker
 
+from api.home.home import home_router
+
+
+def init_routers(app_: FastAPI) -> None:
+    app_.include_router(home_router)
+
 
 def init_listeners(app_: FastAPI) -> None:
 
@@ -51,6 +57,7 @@ def create_app() -> FastAPI:
         redoc_url=None if config.ENV == "production" else "/redoc",
         middleware=make_middleware(),
     )
+    init_routers(app_=app_)
     init_listeners(app_=app_)
     init_cache()
     return app_

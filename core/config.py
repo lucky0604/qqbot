@@ -1,5 +1,6 @@
 import os
 from pydantic import BaseSettings
+from botpy.ext.cog_yaml import read
 
 
 class Config(BaseSettings):
@@ -44,6 +45,11 @@ def get_config():
         "prod": ProductionConfig(),
     }
     return config_type[env]
+
+
+def get_config_consts():
+    config_consts = read(os.path.join("./", "config.yaml"))
+    return config_consts
 
 
 config: Config = get_config()

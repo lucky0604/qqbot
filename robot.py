@@ -16,19 +16,14 @@ import botpy
 from botpy import logging, BotAPI
 from botpy.ext.cog_yaml import read
 from botpy.message import Message
-
-test_config = read(os.path.join(os.path.dirname(__file__), "config.yaml"))
 from botpy.ext.command_util import Commands
 
 _log = logging.get_logger()
 from wcl import wcl_robot
 from wow import get_achivement, get_img
+from core.config import get_config_consts
 
-
-@Commands(name=("服务器状态"))
-async def server_status(api: BotAPI, message: Message, params=None):
-    _log.info(params.split(" "))
-    return True
+args = get_config_consts()
 
 
 class MyClient(botpy.Client):
@@ -52,7 +47,7 @@ class MyClient(botpy.Client):
 
 
 if __name__ == "__main__":
-    print(test_config["token"]["appid"])
+    print(args["token"]["appid"])
     intents = botpy.Intents(public_guild_messages=True)
     client = MyClient(intents=intents)
-    client.run(appid=test_config["token"]["appid"], token=test_config["token"]["token"])
+    client.run(appid=args["token"]["appid"], token=args["token"]["token"])

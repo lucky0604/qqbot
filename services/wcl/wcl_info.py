@@ -1,10 +1,13 @@
 import httpx
-from utils.consts import WCL_URL, WCL_TOKEN
+from utils.consts import WCL_URL
+from core.config import get_config_consts
+
+args = get_config_consts()
 
 
 def getWclCharacterInfo(params):
     headers = {
-        "Authorization": "Bearer " + WCL_TOKEN,
+        "Authorization": "Bearer " + args["wcl"]["token"],
         "Content-Type": "application/json; charset=utf-8"
     }
     if params is None:
