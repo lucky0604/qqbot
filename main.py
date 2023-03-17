@@ -3,37 +3,12 @@ import click
 import uvicorn
 from core.config import config, get_config_consts
 import botpy
-from botpy import logging
-from botpy.message import Message
-
-_log = logging.get_logger()
-from wcl import wcl_robot
-from wow import get_achivement, get_img
+from robot import MyClient
 from core.config import get_config_consts
 import asyncio
 import threading
 
 args = get_config_consts()
-
-
-class MyClient(botpy.Client):
-
-    async def on_ready(self):
-        _log.info(f"robot [{self.robot.name}] on ready")
-
-    async def on_at_message_create(self, message: Message):
-        # str_after = message.content.split(" ")
-        # params = {
-        #     "character_name": str_after[1],
-        #     "serverRegion": str_after[2],
-        #     "server_name": str_after[3]
-        # }
-        # result = getWclCharacterInfo(params)
-        # await self.api.post_message(channel_id=message.channel_id, content=str(result))
-        handlers = [wcl_robot, get_achivement, get_img]
-        for handler in handlers:
-            if await handler(api=self.api, message=message):
-                return
 
 
 def init_robot() -> None:

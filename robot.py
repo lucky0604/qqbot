@@ -29,25 +29,15 @@ args = get_config_consts()
 class MyClient(botpy.Client):
 
     async def on_ready(self):
+        # members = await self.api.get_guild_members(guild_id="pkcani395b")
+        # _log.info(members, " ======= mmbers ==========")
         _log.info(f"robot [{self.robot.name}] on ready")
 
     async def on_at_message_create(self, message: Message):
-        # str_after = message.content.split(" ")
-        # params = {
-        #     "character_name": str_after[1],
-        #     "serverRegion": str_after[2],
-        #     "server_name": str_after[3]
-        # }
-        # result = getWclCharacterInfo(params)
-        # await self.api.post_message(channel_id=message.channel_id, content=str(result))
+        member = await self.api.get_guild_member(guild_id=message.guild_id,
+                                                 user_id=message.author.id)
+        print(member, " ========== member ===========")
         handlers = [wcl_robot, get_achivement, get_img]
         for handler in handlers:
             if await handler(api=self.api, message=message):
                 return
-
-
-if __name__ == "__main__":
-    print(args["token"]["appid"])
-    intents = botpy.Intents(public_guild_messages=True)
-    client = MyClient(intents=intents)
-    client.run(appid=args["token"]["appid"], token=args["token"]["token"])
